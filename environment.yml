@@ -1,16 +1,30 @@
 name: ai2es
 channels:
+  - nvidia
   - conda-forge
 dependencies:
   - python=3.8
   - numpy
+  - cudatoolkit
+  - cudnn
+  - gcc_linux-64
+  - nvcc_linux-64
+  - nccl
+  - cmake
+  - nvidia-ml
+  - cupti
+  - nodejs
   - scipy
   - matplotlib
   - xarray
   - netcdf4
+  - zarr
+  - pyarrow
   - dask
   - pandas
   - scikit-learn
+  - shapely
+  - scikit-image
   - pyyaml
   - pytest
   - distributed
@@ -23,7 +37,17 @@ dependencies:
   - sphinx
   - numba
   - cython
+  - tensorflow
+  - tensorflow-probability
+  - keras
+  - shap
+  - statsmodels
+  - seaborn
+  - xmovie
+  - xskillscore
+  - jupyter_contrib_nbextensions
+  - jupyter_nbextensions_configurator
+  - jupyterlab_widgets
   - pip:
-    - tensorflow
-    - tensorflow-probability
-    - .
+      - scikit-explain
+      - jupyterlab-git
