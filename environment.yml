@@ -1,18 +1,12 @@
 name: ai2es
 channels:
-  - nvidia
   - conda-forge
 dependencies:
   - python=3.8
   - numpy
   - cudatoolkit
   - cudnn
-  - gcc_linux-64
-  - nvcc_linux-64
-  - nccl
   - cmake
-  - nvidia-ml
-  - cupti
   - nodejs
   - scipy
   - matplotlib
