@@ -10,8 +10,12 @@ import warnings
 
 from sklearn.metrics import precision_recall_curve, roc_curve, average_precision_score, f1_score, brier_score_loss
 from sklearn.metrics import roc_auc_score
+from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
 from sklearn.utils import resample
 from scipy import interpolate
+from taylorDiagram import ModifiedTaylorDiagram
+import scipy.stats as sps
+import string
 
 #import warnings
 #from shapely.errors import ShapelyDeprecationWarning
@@ -73,6 +77,133 @@ def plot_verification(estimators, X, y,
     axes.flat[-1].remove()
     plt.subplots_adjust(wspace=0.2)
 
+def plot_2d_kde(ax, x, y):
+        """
+        Add contours of the kernel density estimate
+        """
+        xmin, xmax = np.min(x), np.max(x)
+        ymin, ymax = np.min(y), np.max(y)
+
+        # Peform the kernel density estimate
+        xx, yy = np.mgrid[xmin:xmax:100j, ymin:ymax:100j]
+        positions = np.vstack([xx.ravel(), yy.ravel()])
+        values = np.vstack([x, y])
+        kernel = sps.gaussian_kde(values)
+        f = np.reshape(kernel(positions).T, xx.shape)
+
+        percentiles = [50.0, 75.0, 90.0]
+        linewidths = [
+            0.25,
+            0.75,
+            1.5,
+        ]
+        line_colors = ["xkcd:indigo", "xkcd:dark cyan", "black"]
+        levels = np.zeros((len(percentiles)))
+        for i in range(len(percentiles)):
+            levels[i] = np.percentile(f.ravel(), percentiles[i])
+
+        # Contour plot
+        cset = ax.contour(
+            xx,
+            yy,
+            f,
+            levels=levels,
+            linewidths=linewidths,
+            colors=line_colors,
+        )
+        fmt = {}
+        for l, s in zip(cset.levels, percentiles[::-1]):
+            fmt[l] = f"{int(s)}"
+
+        ax.clabel(cset, cset.levels, inline=True, fontsize=6, fmt=fmt)   
+
+        
+def bootstrap_td(estimators, X,y, n_boot=5):
+    points = []
+    for i in range(n_boot):
+        idx = resample(range(len(y)), replace=True)
+        predictions = [model.predict(X.iloc[idx]) for _, model in estimators]
+        _y = y[idx]
+        points.append(np.array([ [np.std(pred,ddof=1), np.corrcoef(_y, pred)[0,1],
+                         pred.mean()-np.mean(_y)] for pred in predictions]))
+    
+    return points         
+    
+def plot_taylor_diagram(estimators, X, y, normalize=False, 
+                        rmse_contours=np.arange(0, 400, 25.0), n_boot=30):
+    """Plot the Taylor Diagram for Regression-based Verification."""
+    labels = [l for l,_ in estimators]
+    cmap = mpl.cm.rainbow
+
+    # Compute stddev, correlation coefficient and bias of models
+    #points = np.array([ [np.std(pred,ddof=1), np.corrcoef(y, pred)[0,1],
+    #                     pred.mean()-np.mean(y)] for pred in predictions])
+
+    points = bootstrap_td(estimators, X, y, n_boot=n_boot)
+    
+    mean_points = np.mean(points, axis=0)
+    err = np.std(points, axis=0)
+    
+    td = ModifiedTaylorDiagram(np.std(y,ddof=1), 
+                            normalize=normalize, fontsize=8)
+
+    #Calcuate the colours for the points on the diagram, by passing the bias                             
+    colors = td.calc_colors(mean_points[:,-1])
+
+    # Add colorbar to the diagram
+    cbar = td.add_colorbar(mean_points[:,-1], fontsize=14)
+
+    # Add the error std. dev. contours, and label them
+    contours = td.add_contours(colors='darkblue',levels=rmse_contours,
+                                linestyles='dotted')
+
+    plt.clabel(contours, contours.levels[0:len(contours.levels)-2:2],
+               inline=1, use_clabeltext=1)
+
+    plt.text(0.02, 0.75, 'Centered RMSE', transform=td.ax.transAxes,
+             rotation=30, color='darkblue', fontsize=8)
+
+    # Add points to modified Taylor diagram
+    markers = ['o', 'x', '*']
+    for i,(stddev,corrcoef,bias) in enumerate(mean_points):
+        td.add_point(stddev, corrcoef, stddev_err=err[i, 0], 
+                     cc_err=err[i,1], marker=markers[i],
+                      markersize=6., c=cmap(colors[i]), lw=0.0, 
+                      label=f"{labels[i]}", )
+    
+    # Add a legend to the diagram
+    td.add_legend(prop=dict(size='small'), 
+                   loc=(0.9,0.9))
+    
+    
+def plot_verification_scatter(estimators, X, y, add_kde=True, add_stats=True):
+    f, axes = plt.subplots(dpi=300, figsize=(6,4), ncols=2, nrows=2, sharey=True, sharex=True)
+    for (name, model), ax in zip(estimators, axes.flat):
+        pred = model.predict(X)
+        ax.scatter(y, pred, s=1, alpha=0.7)
+        if add_kde:
+            plot_2d_kde(ax, y, pred)
+            
+        if add_stats: 
+            rmse = np.sqrt(mean_squared_error(y, pred))
+            mae = mean_absolute_error(y, pred)
+            r2 = r2_score(y, pred)
+            for i, (sc_name, score) in enumerate(zip(['RMSE', 'MAE', 'R$^2$'], [rmse, mae, r2])):
+                ax.annotate(fr'{sc_name} : {score:.2f}', xy=(0.05, 0.8-(i*0.09)), 
+                            xycoords='axes fraction', fontsize=6)
+            
+            
+        ax.plot(np.arange(0,np.max(y)), np.arange(0,np.max(y)), ls='dashed', color='k', alpha=0.8)
+        
+        ax.set_xlim(0,np.percentile(y, 99.5))
+        ax.set_ylim(0,np.percentile(y, 99.5))
+        ax.set_xlabel('True\nLightning Flashes', fontsize=8)
+        ax.set_ylabel('Predicted\nLightning Flashes', fontsize=8)
+        ax.set_title(name)
+    
+    axes.flat[-1].remove()
+    plt.subplots_adjust(wspace=0.2, hspace=0.6)
+    
 class VerificationDiagram:
     mpl.rcParams["axes.titlepad"] = 15
     mpl.rcParams["xtick.labelsize"] = 10
@@ -292,6 +423,7 @@ class VerificationDiagram:
                 if diagram == 'roc':
                     highest_val = np.argmax(_x - _y)
                 else:
+                    csi = 1 / ((1/_x) + (1/_y) - 1.0)
                     highest_val = np.argmax(csi)
             
                 ax.scatter(
@@ -301,7 +433,7 @@ class VerificationDiagram:
                         marker = "X", 
                         **plot_kwargs, 
                         )
-            
+        """
         if error_bars:
             # Adds the 95% confidence interval.
             for line_label, color in zip(keys, line_colors):
@@ -328,6 +460,7 @@ class VerificationDiagram:
                 )   
             
                 ax.add_patch(polygon_patch)
+        """
         
         if scores is not None:
             if diagram == 'performance':
@@ -516,6 +649,7 @@ def reliability_curve(targets, predictions, n_bins=10):
         
     return np.array(mean_fcst_probs), np.array(event_frequency), indices
 
+'''
 def _confidence_interval_to_polygon(
     x_coords_bottom,
     y_coords_bottom,
@@ -641,3 +775,4 @@ def _vertex_arrays_to_list(vertex_x_coords, vertex_y_coords):
         vertex_coords_as_list.append((vertex_x_coords[i], vertex_y_coords[i]))
 
     return np.array(vertex_coords_as_list)
+'''
