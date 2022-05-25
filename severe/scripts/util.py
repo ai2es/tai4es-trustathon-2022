@@ -1,6 +1,17 @@
 from os.path import join
 import pandas as pd
 
+def get_right_units_vil(vil):
+    """they scaled VIL weird, so this unscales it"""
+    tmp = np.zeros(vil.shape)
+    idx = np.where(vil <=5)
+    tmp[idx] = 0
+    idx = np.where((vil>5)*(vil <= 18))
+    tmp[idx] = (vil[idx] -2)/90.66
+    idx = np.where(vil>18)
+    tmp[idx] = np.exp((vil[idx] - 83.9)/38.9)
+    return tmp
+
 def unscale_data(X):
     """Unscale the dataset"""
     scaling = { 'wv' : {'mean' : -37.076042, 'std' : 11.884567},
