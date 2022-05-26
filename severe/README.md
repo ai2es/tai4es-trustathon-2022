@@ -14,13 +14,15 @@ For this summer school, we have pre-fit ML models for both the classification an
 3. Determine the learned relationship 
 4. Assess explanations for individual predictions
 
-By gaining a deeper understanding of the dataset/model, we can start to assess the trustwortiness of the model. 
+By gaining a deeper understanding of the dataset/model, we can start to assess the trustwortiness of the model. We have provided template notebooks with examples of model explainability for a single model for the classification and regression tasks. In each of them there are series of question for the participants to ponder and discuss when comes to model development, understanding, and implementation. We include optional tasks and the flexibility to evaluate different ML models. We encourage the participants to attempt these different tasks to ensure their understanding of the material. 
+
+These notebooks expect that you complete the classification tasks before the regression tasks.
 
 
 ## Data and ML Models 
 
 [The Storm EVent ImagRy (SEVIR) dataset](https://proceedings.neurips.cc/paper/2020/file/fa78a16157fed00d7a80515818432169-Paper.pdf) is a spatiotemporal dataset curated on weather events. The SEVIR dataset is based on 3 channels (C02, C09, C13) from Geostationary Environmetnal Satellite System (GOES)-16, Next-Generation Radar (NEXRAD) vertically integrated liquid, and GOES-16 Geostationary Lightning Mapper (GLM) flashes. Using these weather-centered imagery, Chase et al. extracted spatial percentiles
-from the visible reflectance, water vapor brightness temperature, infrared, and VIL. Additional details on the feature engineering can be found at this [link](https://github.com/ai2es/WAF_ML_Tutorial_Part1/blob/main/jupyter_notebooks/Notebook02_Feature_Engineering.ipynb).
+from the visible reflectance, water vapor brightness temperature, infrared, and VIL. Additional details on the feature engineering can be found at this [link](https://github.com/ai2es/WAF_ML_Tutorial_Part1/blob/main/jupyter_notebooks/Notebook02_Feature_Engineering.ipynb). For this summer school program, we have coarsened the resolution of the SEVIR dataset to faciliate comparsion between traditional and deep learning techniques. We have cleverly re-named this dataset as sub-SEVIR. 
 
 ## Notes
 * [Randy Chase's SEVIR Colab Notebook](https://colab.research.google.com/drive/1pxJo458Ol0uLcAPyQWHyJpldze-tjnqG?usp=sharing)
