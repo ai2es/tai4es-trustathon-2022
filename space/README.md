@@ -64,8 +64,10 @@ Given your experience this week, what Trustworthy and Explainable AI suggestions
 
 ## Data
 Data used for this challenge are publicly available from NOAA here:
-     Public data: https://ngdc.noaa.gov/geomag/data/geomag/magnet/public.zip
-     Private data: wget https://ngdc.noaa.gov/geomag/data/geomag/magnet/private.zip
+
+* Public data: https://ngdc.noaa.gov/geomag/data/geomag/magnet/public.zip
+* Private data: https://ngdc.noaa.gov/geomag/data/geomag/magnet/private.zip
+
 The notebooks automatically retrieve these data.
 
 ## ML Models
@@ -83,7 +85,7 @@ The final model is an ensemble of 5 models with the same structure, trained on d
 
 This is the benchmark model provided by the MagNet competition organizers. Long Short Term Memory networks or LSTMs are a special kind of recurrent neural network especially suited to time series data. In the related notebook, we will show you how to implement a first-pass LSTM model for predicting Dst.
 
-TBD: Expand this LSTM description.
+TODO: Expand this LSTM description.
 
 ## Notes
 
