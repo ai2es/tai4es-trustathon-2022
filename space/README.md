@@ -27,7 +27,7 @@ We will use two notebooks through the summer school experience:
 
 ### Day 1 - Space Weather 101: Solar Wind and Geomagnetic Storms
 
-Goal: Be able to run the MagNet notebooks successfully and explore relationships between the solar wind (input data, aka “features”) and Dst (output data, aka “labels”) as pre-modeling XAI.
+Goal: Be able to run the MagNet notebooks successfully and explore relationships between the solar wind input data “features” and <i>Dst</i> predictions (“labels”), as pre-modeling XAI.
 
 Discussion Questions:
 1. Can you describe the physical process between solar wind and ground geomagnetic disturbances? What is the Dst index primarily used for? [Hint: Large changes in solar wind velocity and density combined with the magnetic field oriented southward typically results in significant changes in the geomagnetic field near the Earth’s surface about an hour later.]
@@ -37,7 +37,7 @@ Discussion Questions:
 
 ### Day 2 - Deeper XAI
 
-Goal: Understand tradeoffs between simple LSTM and more complex CNN model.
+Goal: Understand tradeoffs between our simple LSTM and more complex CNN model.
 
 Discussion Questions:
 1. How well do the CNN and LSTM models perform? 
