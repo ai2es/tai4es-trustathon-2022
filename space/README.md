@@ -21,8 +21,8 @@ Thus, the competition task was to develop models for forecasting Dst that push t
 The overall goal is to learn about ML modeling a key space weather storm indicator Dst.
 
 We will use two notebooks through the summer school experience:
-MagNet_LSTM_with_XAI.ipynb - ideal for students newer to AI/ML.
-Magnet_cnn_tutorial.ipynb - ideal for students with more AI/ML experience.
+magnet_lstm_tutorial.ipynb - ideal for students newer to AI/ML.
+magnet_cnn_tutorial.ipynb - ideal for students with more AI/ML experience.
 
 
 ### Day 1 - Space Weather 101: Solar Wind and Geomagnetic Storms
@@ -83,7 +83,5 @@ The final model is an ensemble of 5 models with the same structure, trained on d
 
 This is the benchmark model provided by the MagNet competition organizers. Long Short Term Memory networks or LSTMs are a special kind of recurrent neural network especially suited to time series data. In the related notebook, we will show you how to implement a first-pass LSTM model for predicting Dst.
 
-TBD: Expand this LSTM description.
-
-## Notes
+TODO: Expand this LSTM description.
 
