@@ -21,8 +21,8 @@ Thus, the competition task was to develop models for forecasting Dst that push t
 The overall goal is to learn about ML modeling a key space weather storm indicator Dst.
 
 We will use two notebooks through the summer school experience:
-magnet_lstm_tutorial.ipynb - ideal for students newer to AI/ML.
-magnet_cnn_tutorial.ipynb - ideal for students with more AI/ML experience.
+1. magnet_lstm_tutorial.ipynb - ideal for students newer to AI/ML.
+2. magnet_cnn_tutorial.ipynb - ideal for students with more AI/ML experience.
 
 
 ### Day 1 - Space Weather 101: Solar Wind and Geomagnetic Storms
@@ -30,43 +30,43 @@ magnet_cnn_tutorial.ipynb - ideal for students with more AI/ML experience.
 Goal: Be able to run the MagNet notebooks successfully and explore relationships between the solar wind (input data, aka “features”) and Dst (output data, aka “labels”) as pre-modeling XAI.
 
 Discussion Questions:
-Can you describe the physical process between solar wind and ground geomagnetic disturbances? What is the Dst index primarily used for? 
-[Hint: Large changes in solar wind velocity and density combined with the magnetic field oriented southward typically results in significant changes in the geomagnetic field near the Earth’s surface about an hour later.]
-Roughly 85% of the time, near Earth is geomagnetically quiet. How might these infrequent solar wind events make modeling their predicted effects challenging? How might you make an accurate model with very few extreme events/samples?
-How are the input data differently distributed? How are the input data correlated or uncorrelated with each other? How are they correlated with Dst? 
-Based on what you’ve learned so far, what do you think your user will care about most? How do you think you can help your user view this model as trustworthy? 
+1. Can you describe the physical process between solar wind and ground geomagnetic disturbances? What is the Dst index primarily used for? [Hint: Large changes in solar wind velocity and density combined with the magnetic field oriented southward typically results in significant changes in the geomagnetic field near the Earth’s surface about an hour later.]
+2. Roughly 85% of the time, near Earth is geomagnetically quiet. How might these infrequent solar wind events make modeling their predicted effects challenging? How might you make an accurate model with very few extreme events/samples?
+3. How are the input data differently distributed? How are the input data correlated or uncorrelated with each other? How are they correlated with Dst? 
+4. Based on what you’ve learned so far, what do you think your user will care about most? How do you think you can help your user view this model as trustworthy? 
 
 ### Day 2 - Deeper XAI
 
 Goal: Understand tradeoffs between simple LSTM and more complex CNN model.
 
 Discussion Questions:
-How well do the CNN and LSTM models perform? Do you expect them to perform better or worse for quiet or active space weather?
- What are the model sensitivities to the input parameters?
-If one or more solar wind instruments were to degrade on orbit how do you predict that might impact model performance? 
-Which model do you think best fits your end user’s needs? How would you communicate your decision and the associated tradeoffs to your end user?
+1. How well do the CNN and LSTM models perform? 
+2. Do you expect them to perform better or worse for quiet or active space weather?
+3. What are the model sensitivities to the input parameters? If one or more solar wind instruments were to degrade on orbit how do you predict that might impact model performance? 
+4. Which model do you think best fits your end user’s needs? How would you communicate your decision and the associated tradeoffs to your end user?
 
 ### Day 3 - Data Quality
 
 Goal: Review case studies, explore data degradation, and contemplate the value in incorporating new future training data.
 
 Discussion Questions:
-Thinking about your predictions from yesterday, if you degrade the data for one or more input parameters by adding Gaussian noise, how does that impact the model performance?
-Based on what you learned in the lectures today and your review of these case studies, what would you show your end user if they asked for a case study? How would you do this? 
+1. Thinking about your predictions from yesterday, if you degrade the data for one or more input parameters by adding Gaussian noise, how does that impact the model performance?
+2. Based on what you learned in the lectures today and your review of these case studies, what would you show your end user if they asked for a case study? How would you do this? 
 
 ### Day 4 - Open Exploration
 
 Goal: Open dialog and student driven space weather exploration.
 
 Discussion Questions:
-Imagine we experience a super-geomagnetic storm like that of 1859, the “Carrington Event” (TBD link to a paper). How might we prepare our model to predict rare and such large events? 
-Given your experience this week, what Trustworthy and Explainable AI suggestions would you like to make for modeling Dst and other space weather indicators? How would you communicate this to your end user? 
+1. Imagine we experience a super-geomagnetic storm like that of 1859, the “Carrington Event” (TODO link to a paper). How might we prepare our model to predict rare and such large events? 
+2. Given your experience this week, what Trustworthy and Explainable AI suggestions would you like to make for modeling Dst and other space weather indicators? How would you communicate this to your end user? 
 
 ## Data
-Data used for this challenge are publicly available from NOAA here:
-     Public data: https://ngdc.noaa.gov/geomag/data/geomag/magnet/public.zip
-     Private data: wget https://ngdc.noaa.gov/geomag/data/geomag/magnet/private.zip
-The notebooks automatically retrieve these data.
+Data used for this challenge are publicly available from NOAA at these links:
+* https://ngdc.noaa.gov/geomag/data/geomag/magnet/public.zip
+* https://ngdc.noaa.gov/geomag/data/geomag/magnet/private.zip
+
+Note that the competition discussed above used public data for development and the public leaderboard. A private dataset was kept internal during the competition for use in scoring by organizers. Since the competition has passed, both datasets are publicly accessible from NOAA. We will build and evaulate the models using the competition's public data and evaluate storm event case studies using the competition's "private" data.
 
 ## ML Models
 
