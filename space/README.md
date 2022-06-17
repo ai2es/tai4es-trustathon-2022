@@ -27,7 +27,7 @@ We will use two notebooks through the summer school experience:
 
 ### Day 1 - Space Weather 101: Solar Wind and Geomagnetic Storms
 
-Goal: Be able to run the MagNet notebooks successfully and explore relationships between the solar wind input data “features” and <i>Dst</i> predictions (“labels”), as pre-modeling XAI.
+Goal: Be able to run both MagNet notebooks successfully, and also explore relationships between the solar wind input data “features” and <i>Dst</i> predictions (“labels”), as pre-modeling XAI.
 
 Discussion Questions:
 1. Can you describe the physical process between solar wind and ground geomagnetic disturbances? What is the Dst index primarily used for? [Hint: Large changes in solar wind velocity and density combined with the magnetic field oriented southward typically results in significant changes in the geomagnetic field near the Earth’s surface about an hour later.]
@@ -58,7 +58,7 @@ Discussion Questions:
 Goal: Open dialog and student driven space weather exploration.
 
 Discussion Questions:
-1. Imagine we experience a super-geomagnetic storm like that of 1859, the “Carrington Event” (TODO link to a paper). How might we prepare our model to predict rare and such large events? 
+1. Imagine we experience a super-geomagnetic storm like that of 1859, the “Carrington Event” (e.g. see [Tsuritani et al., 2003](https://agupubs.onlinelibrary.wiley.com/doi/pdf/10.1029/2002JA009504)). How might we prepare our model to predict rare and such large events? 
 2. Given your experience this week, what Trustworthy and Explainable AI suggestions would you like to make for modeling Dst and other space weather indicators? How would you communicate this to your end user? 
 
 ## Data
@@ -82,6 +82,3 @@ The final model is an ensemble of 5 models with the same structure, trained on d
 ### Long Short Term Memory (LSTM) Model
 
 This is the benchmark model provided by the MagNet competition organizers. Long Short Term Memory networks or LSTMs are a special kind of recurrent neural network especially suited to time series data. In the related notebook, we will show you how to implement a first-pass LSTM model for predicting Dst.
-
-TODO: Expand this LSTM description.
-
