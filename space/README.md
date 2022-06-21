@@ -81,4 +81,4 @@ The final model is an ensemble of 5 models with the same structure, trained on d
 
 ### Long Short Term Memory (LSTM) Model
 
-This is the benchmark model provided by the MagNet competition organizers. Long Short Term Memory networks or LSTMs are a special kind of recurrent neural network especially suited to time series data. In the related notebook, we will show you how to implement a first-pass LSTM model for predicting Dst.
+This is the benchmark model provided by the MagNet competition organizers. Long Short Term Memory networks or LSTMs are a special kind of recurrent neural network especially suited to time series data. In the related notebook, we will show you how to implement a first-pass LSTM model for predicting <i>Dst</i>. This notebook is ideally suited for students newer to AI/ML topics. In this notebook, you'll find many embedded prompts with useful tips, optional tasks and questions to ponder.
