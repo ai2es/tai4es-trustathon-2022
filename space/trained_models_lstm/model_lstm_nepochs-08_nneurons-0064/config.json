@@ -1,0 +1,1 @@
+{"timesteps": 32, "batch_size": 32, "solar_wind_subset": ["bt", "temperature", "bx_gsm", "by_gsm", "bz_gsm", "speed", "density"]}
