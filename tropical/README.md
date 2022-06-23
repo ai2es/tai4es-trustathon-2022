@@ -19,4 +19,8 @@ These notebooks expect that you complete the classification tasks before the reg
 
 ## Data and ML Models 
 
-[The NASA Tropical Storm Competition dataset](https://mlhub.earth/data/nasa_tropical_storm_competition) leverages satellite imagery to create deep learning -based models of tropical cyclone wind speed.  The dataset consists of single-band satellite images and wind speed annotations from over 600 storms that have been labeled by NASA and the Radiant Earth Foundation.  The images are captured at different times in the storms' life cycles, and labeled with relative time since the beginning of the storm--this means that you can use past images of a given storm to inform your model, but you cannot use images from later on in a storm to predict winds earlier in the storm.  
+[The NASA Tropical Storm Competition dataset](https://mlhub.earth/data/nasa_tropical_storm_competition) leverages satellite imagery to create deep learning -based models of tropical cyclone wind speed.  The dataset consists of single-band satellite images and wind speed annotations from over 600 storms that have been labeled by NASA and the Radiant Earth Foundation.  The images are captured at different times in the storms' life cycles, and labeled with relative time since the beginning of the storm--this means that you can use past images of a given storm to inform your model, but you cannot use images from later on in a storm to predict winds earlier in the storm.
+
+## Resources
+
+[An Evaluation of Dvorak Technique–Based Tropical Cyclone Intensity Estimates](https://journals.ametsoc.org/view/journals/wefo/25/5/2010waf2222375_1.xml)
