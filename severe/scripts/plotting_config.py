@@ -1,5 +1,20 @@
 import numpy as np
 
+deep_display_feature_names = {'ir069' : 'WV', 
+                         'ir107' : 'IR', 
+                         'vil'   : 'VIL',
+                         'vis' : 'VIS',
+                        }
+
+deep_color_dict = {'ir107' : [1.0, 0.4980392156862745, 0.4980392156862745], 
+              'ir069' : [0.49411764705882355, 0.5137254901960784, 0.9725490196078431],
+              'vil' : 'y',
+              'vis' : 'k',
+             }
+
+
+
+
 pretty_names = [ '$IR_{min}$', '$IR_{1st}$', '$IR_{10th}$', '$IR_{25th}$', '$IR_{med}$',
   '$IR_{75th}$',  '$IR_{90th}$',  '$IR_{99th}$', '$IR_{max}$', '$WV_{min}$', '$WV_{1st}$', '$WV_{10th}$', '$WV_{25th}$', '$WV_{med}$',
   '$WV_{75th}$',  '$WV_{90th}$',  '$WV_{99th}$', '$WV_{max}$', '$VIS_{min}$', '$VIS_{1st}$', '$VIS_{10th}$', '$VIS_{25th}$', '$VIS_{med}$',
