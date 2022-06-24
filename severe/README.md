@@ -8,7 +8,7 @@
 
 
 ## Goals
-For this summer school, we have pre-fit ML models (logistic regression, random forest, and gradient-boosted trees) for both the classification and regression task. Our primary goal is to become familiar with the dataset/ML models and assess what the ML models have learned. In short our goals are the following:
+For this summer school, we have pre-fit ML models (logistic regression, random forest, and gradient-boosted trees) and deep learning model (convolution neural networks) for both the classification and regression task. Our primary goal is to become familiar with the dataset/ML/DL models and assess what the ML/DL models have learned. In short our goals are the following:
 1. Become familiar with the model performance 
 2. Determine the important features 
 3. Determine the learned relationships 
