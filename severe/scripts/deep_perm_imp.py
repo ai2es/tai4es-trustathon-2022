@@ -59,7 +59,7 @@ class ImagePermI:
         self.preds = np.ravel(self.model.predict(in_images))
         if metric=='auc':
             score = sklearn.metrics.roc_auc_score(self.labels,self.preds)
-        elif metric == 'rmse':
+        elif metric == 'mse':
             score = sklearn.metrics.mean_squared_error(self.labels,self.preds)
         return score 
             
@@ -109,7 +109,7 @@ class ImagePermI:
             idx_to_consider = np.setxor1d(idx_to_consider, leave_alone)
 
         #get starting score of the pass 
-        self.start_score = self.get_score(image_array)
+        self.start_score = self.get_score(image_array, metric=metric)
 
         #loop over all channels you want to consider
         for i in tqdm.tqdm(idx_to_consider):
@@ -124,7 +124,7 @@ class ImagePermI:
                 image_tmp[:,:,:,i] = self.orig_images[:,:,:,i]
 
             #compute score with altered array 
-            self.scores[i] = self.get_score(image_tmp, metric)
+            self.scores[i] = self.get_score(image_tmp, metric=metric)
 
         #free up RAM, del big temporary variables 
         del image_tmp, image_array

@@ -2,6 +2,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 import copy
 import cmocean
+from matplotlib.colors import BoundaryNorm
+from matplotlib.ticker import MaxNLocator
+
 
 
 def get_group_idx(group_string,ds):
@@ -33,60 +36,101 @@ def show_sample(ds):
     return ds.id.values
 
 
-def make_plot(image,mask=None,maskalpha=0.7,title=None,vmin=None,vmax=None,
-              figsize=(6.4*2, 4.8*2)):
+def make_plot(image, mask=None, maskalpha=0.7,
+              cmap=cmocean.cm.balance,normalize=False, 
+              mask_thresh=None, title=None):
 
-  fig,axes = plt.subplots(2,4,figsize=figsize)
-  fig.set_facecolor('w')
+    fig,axes = plt.subplots(nrows=2,ncols=2, figsize=(8,7), dpi=170)
+    fig.set_facecolor('w')
 
-  titles = ['WV','IR','VIL','VIS']
+    titles = ['WV','IR','VIL','VIS']
+    vmins = [-2.5,-2.5,0,0]
+    vmaxs = [2,2,20,4]
 
-  axes_top = axes[0,:]
-
-  cmaps = ['Blues','turbo','Spectral_r','Greys_r']
-  for i,ax in enumerate(axes_top):
-    ax.imshow(im[:,:,i],cmap=cmaps[i])
-    ax.axis('off')
-    ax.set_title(titles[i])
-
-  axes_bottom = axes[1,:]
-
-  cmaps = ['Greys','Greys','Greys_r','Greys_r']
-
-  vmins = [-2.5,-2.5,0,0]
-  vmaxs = [2,2,20,4]
-
-  for i,ax in enumerate(axes_bottom):
-    ax.imshow(im[:,:,i],cmap=cmaps[i],vmin=vmins[i],vmax=vmaxs[i])
-    if mask is not None:
-      if mask.shape[-1] == 4:
-        if (vmin is None) or (vmax is None):
-          #determine color limits so white is 0 
-          absmax = np.max(np.abs(mask[:,:,i]))
-          vmin_t = -1*absmax
-          vmax_t = absmax
-        else:
-          vmin_t = vmin
-          vmax_t = vmax
-        pm = ax.imshow(mask[:,:,i],cmap='seismic',alpha=maskalpha,vmin=vmin_t,vmax=vmax_t)
-        plt.colorbar(pm,ax=ax,shrink=0.375)
-      else:
-        if (vmin is None) or (vmax is None):
-          #determine color limits so white is 0 
-          absmax = np.max(np.abs(mask))
-          vmin = -1*absmax
-          vmax = absmax 
-        pm = ax.imshow(mask,cmap='seismic',alpha=maskalpha,vmin=vmin,vmax=vmax)
-
-
-    ax.axis('off')
+    cmaps = ['Blues','turbo','Greys','Greys_r']
     
+    vmax = round(np.nanpercentile(mask, 99.9),4)
+    vmin = -vmax
+    
+    levels = MaxNLocator(nbins=11).tick_values(vmin,vmax)
+    
+    ##levels = np.linspace(vmin, vmax, 11)
+    cmap = plt.colormaps['seismic']       
+    norm = BoundaryNorm(levels, ncolors=cmap.N, clip=True)
+    
+    if mask_thresh is not None:
+        mask = np.ma.masked_where(abs(mask)<=mask_thresh, mask)
+        title=fr'Abs(SHAP Values) $\geq$ {mask_thresh}'
 
-  if title is not None:
-    fig.suptitle(title,y=1)
-  plt.tight_layout()
+    for i,ax in enumerate(axes.flat):
+        if i == 2:
+            im = np.ma.masked_where(image[:,:,i] <= 0, image[:,:,i])
+            alpha=0.7
+        else:
+            im = image[:,:,i]
+            alpha=0.8
+            
+        ax.imshow(im,cmap=cmaps[i],vmin=vmins[i],vmax=vmaxs[i], alpha=alpha, aspect='auto')
+    
+        if normalize:
+            im = ax.pcolormesh(mask[:,:,i], cmap='seismic', alpha=1.0, norm=norm)
+        else:
+            mdata = np.ma.filled(mask[:,:,i], np.nan)
+            vmax = round(np.nanpercentile(mdata, 99.9),4)
+            vmin = -vmax
+            levels = MaxNLocator(nbins=11).tick_values(vmin,vmax)
+            norm = BoundaryNorm(levels, ncolors=cmap.N, clip=True)
+            im = ax.pcolormesh(mask[:,:,i], cmap='seismic', alpha=1.0, norm=norm)
+            fig.colorbar(im, ax=ax, shrink=0.9, label='SHAP Values')
+        
+        color = 'k' if i < 3 else 'w'
+        
+        ax.annotate(f'SHAP min = {np.min(mask[:,:,i]): 0.03f}', 
+                    (0.1, 0.9), xycoords='axes fraction', color=color, fontsize=8)
+        ax.annotate(f'SHAP max = {np.max(mask[:,:,i]): 0.03f}', 
+                    (0.1, 0.85), xycoords='axes fraction', color=color, fontsize=8)
+        
+        ax.axis('off')
+        ax.set_title(titles[i], fontsize=15)
 
-  return ax 
+    # Add colorbar
+    if normalize:
+        fig.colorbar(im, ax=axes.ravel().tolist(), shrink=0.9, label='SHAP Values')    
+    
+    
+    if title is not None:
+        fig.suptitle(title)
+    #plt.tight_layout()
+
+    return ax
+
+def cdf_plot(im, shap_values):
+
+    fig = plt.figure()
+    fig.set_facecolor('w')
+    colors = np.array(['b','r','y','k'])
+    labels = np.array(['WV','IR','VIL','VIS'])
+    for i in np.arange(0,4):
+        s_tmp = copy.deepcopy(shap_values[:,:,i].ravel())
+        idx_to_sort = np.argsort(im[:,:,i].ravel())
+        s_tmp = s_tmp.cumsum()
+        plt.plot(class_explainer.expected_value + s_tmp,color=colors[i],label=labels[i])
+        plt.plot(len(s_tmp),class_explainer.expected_value + s_tmp[-1],'o',
+           color=colors[i],markerfacecolor='w')
+        anno = str(np.round(s_tmp[-1],2))
+        plt.text(len(s_tmp)+50,class_explainer.expected_value + s_tmp[-1]-0.005,
+           anno)
+  
+        anno = '$\mathrm{\mathbb{E}}[x]$:' + str(np.round(class_explainer.expected_value[0],2))
+
+    plt.text(100, class_explainer.expected_value[0]+.07,
+           anno)
+  
+    plt.legend(loc=2)
+    plt.ylabel('Output Probability')
+    plt.xlabel('Pixel ID')
+    plt.xlim([0,len(s_tmp)+300])
+    plt.title('Shap Image CDF')
 
 
 def minmax(X):
@@ -109,59 +153,3 @@ def standardanom(X,axis=True):
 
   return X_new
 
-def make_plot(image,mask=None,maskalpha=0.7,title=None,
-              cmap=cmocean.cm.balance,normalize=True):
-
-  fig,axes = plt.subplots(3,4)
-
-  fig.set_facecolor('w')
-
-  titles = ['WV','IR','VIL','VIS']
-  vmins = [-2.5,-2.5,0,0]
-  vmaxs = [2,2,20,4]
-
-  axes_top = axes[0,:]
-
-  cmaps = ['Blues','turbo','Spectral_r','Greys_r']
-  for i,ax in enumerate(axes_top):
-    ax.imshow(image[:,:,i],cmap=cmaps[i],vmin=vmins[i],vmax=vmaxs[i])
-    ax.axis('off')
-    ax.set_title(titles[i])
-
-  axes_middle = axes[1,:]
-
-  if normalize:
-    mask_orig = copy.deepcopy(mask)
-    mask = standardanom(mask)
-  for i,ax in enumerate(axes_middle):
-    # ax.imshow(im[:,:,i],cmap=cmaps[i],vmin=vmins[i],vmax=vmaxs[i])
-    if mask is not None:
-      if mask.shape[-1] == 4:
-        
-        pm= ax.imshow(mask[:,:,i],cmap=cmap,alpha=maskalpha,vmin=-4,vmax=4)
-      else:
-        pm= ax.imshow(mask,cmap=cmap,alpha=maskalpha)
-
-    ax.axis('off')
-    # plt.colorbar(pm,ax=ax)
-
-  axes_bottom = axes[2,:]
-
-  if normalize:
-    mask = standardanom(mask_orig,axis=False)
-  for i,ax in enumerate(axes_bottom):
-    # ax.imshow(im[:,:,i],cmap=cmaps[i],vmin=vmins[i],vmax=vmaxs[i])
-    if mask is not None:
-      if mask.shape[-1] == 4:
-        pm= ax.imshow(mask[:,:,i],cmap=cmap,alpha=maskalpha,vmin=-4,vmax=4)
-      else:
-        pm= ax.imshow(mask,cmap=cmap,alpha=maskalpha)
-
-    ax.axis('off')
-    # plt.colorbar(pm,ax=ax)
-    
-  if title is not None:
-    fig.suptitle(title,y=1)
-  plt.tight_layout()
-
-  return ax,mask
