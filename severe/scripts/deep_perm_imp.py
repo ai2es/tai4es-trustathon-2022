@@ -4,6 +4,7 @@ import gc
 import sklearn.metrics
 import numpy as np
 
+
 class ImagePermI:
     """ class to run permutation importance with """ 
     def __init__(self,images,model,labels, subsample_size=1.0, n_permute=10, 
@@ -40,9 +41,10 @@ class ImagePermI:
         for channel in channels:
             #reshape so we can shuffle all the pixels in an image first 
             img_tmp = np.reshape(images_new[:,:,:,channel],[images_new.shape[0],images_new.shape[1]*images_new.shape[2]])
-            img_shuffled = self.genor.permuted(img_tmp, axis=1)
+            img_shuffled = self.genor.permutation(img_tmp, axis=1)
             #reshape back 
             img_shuffled = np.reshape(img_shuffled,[img_shuffled.shape[0],images_new.shape[1],images_new.shape[2]])
+            
             #now shuffle n_sample dim (i.e., shuffle maps)
             if shuff_sampledim:
                 idx_sample = np.random.randint(0,img_shuffled.shape[0],size=img_shuffled.shape[0])
@@ -65,7 +67,10 @@ class ImagePermI:
             
     def single_pass(self, metric, leave_alone=None,direction='backward'):
         #initalize random gen so the shuffles are the same for each single pass 
+        #self.genor = np.random.default_rng(self.seed)
+        
         self.genor = np.random.default_rng(self.seed)
+        
         #to save compute see if all_shuffled array exists, if not shuffle all data for use later
         if self.all_shuffled is None:
             if self.verbose:
