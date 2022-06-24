@@ -1,3 +1,6 @@
+# Pre-requisite to run the notebook
+You need to register with Radiant ML Hub to get an API which will be used to access the data in the notebook. To get your API key, go to dashboard.mlhub.earth. If you have not used Radiant MLHub before, you will need to sign up and create a new account. Else, sign in. In the **API Keys** tab, you will be able to create API key(s), which you will need. _Do not share_ your API key with others: your usage may be limited and sharing your API key is a secuirty risk.
+
 # Tropical Cyclone Use Case
 
 ## Problem Motivation
