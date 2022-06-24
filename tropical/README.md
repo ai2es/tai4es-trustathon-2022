@@ -16,7 +16,7 @@ For this summer school, we have pre-fit ML models (logistic regression, random f
 3. Determine the learned relationships 
 4. Assess explanations for individual predictions
 
-By gaining a deeper understanding of the dataset/model, we can start to assess the trustwortiness of the model. We have provided template notebooks with examples of model explainability for a single model for the classification and regression tasks. In each of them there are series of question for the participants to ponder and discuss as it pertains to model development, understanding, and implementation. We include optional tasks and the flexibility to evaluate different ML models. We encourage the participants to attempt these different tasks to ensure their understanding of the material. 
+By gaining a deeper understanding of the dataset/model, we can start to assess the trust worthiness of the model. We have provided template notebooks with examples of model explainability for a single model for the classification and regression tasks. In each of them there are series of question for the participants to ponder and discuss as it pertains to model development, understanding, and implementation. We include optional tasks and the flexibility to evaluate different ML models. We encourage the participants to attempt these different tasks to ensure their understanding of the material. 
 
 These notebooks expect that you complete the classification tasks before the regression tasks.
 
