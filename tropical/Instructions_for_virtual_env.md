@@ -1,5 +1,7 @@
 # Instructions for setting up the `ai2es` virtual environment
 
+### Note: These instructions are only applicable if you are trying to run any of the Trustathon notebooks locally on your own machine.  If you are using the Trustathon JupyterHub, the default kernel should have all of the dependencies installed and should run conflict-free.
+
 To make sure that all of the packages in `notebook-tropical.ipnyb` can run conflict-free, it is important to set up and run the `ai2es` virtual environment.  Virtual environments freeze package versions and can manage conflicts.  This is especially important for packages that sometimes have issues with backwards compatibility (looking at you, `tensorflow`).  <b>Please note that if you do not run our notebook in the `ai2es` virtual environment, it is quite likely you will run into version conflicts with `tensorflow` and some of the other packages!</b>. 
 
 I will provide instructions for using `Miniconda` to manage your environments.  `Miniconda` is not the only option for doing this and there may be better choices out there; however, if you have strong preferences about how to manage your virtual environments, you probably don't need these instructions!
