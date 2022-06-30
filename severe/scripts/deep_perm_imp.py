@@ -11,9 +11,12 @@ class ImagePermI:
                  seed=42,verbose=True):
     
         rs = np.random.RandomState(123)
-        subsample_size = int(subsample_size*len(images)) if subsample_size < 1.0 else subsample_size
-        inds = rs.choice(len(images), size=subsample_size)
-
+        subsample_size = int(subsample_size*len(images)) if subsample_size <= 1.0 else subsample_size
+        if subsample_size == len(images):
+            inds = np.arange(len(images))
+        else:
+            inds = rs.choice(len(images), size=subsample_size)
+            
         images = images[inds,:,:,:]
         labels = labels[inds]
         
